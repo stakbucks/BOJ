@@ -4,17 +4,16 @@ let input = fs.readFileSync(filePath).toString().split("\n");
 const x = input[1].split(" ").map(Number);
 
 function solution(x) {
-  let result = [];
   const set = new Set(x);
-  const uniq = [...set].sort((a, b) => a - b);
-  let dic = {};
-  uniq.forEach((element, index) => {
-    dic[element] = index;
-  });
-  for (let i = 0; i < x.length; i++) {
-    result.push(dic[x[i]]);
+  const arr = [...set].sort((a, b) => a - b);
+  const obj = {};
+  let answer = [];
+  for (let i = 0; i < arr.length; i++) {
+    obj[arr[i]] = i;
   }
-  console.log(result.join(" "));
+  for (let i = 0; i < x.length; i++) {
+    answer[i] = obj[x[i]];
+  }
+  console.log(answer.join(" "));
 }
-
 solution(x);
