@@ -7,11 +7,6 @@ const arr = input[1].split(" ");
 arr.sort();
 
 const answer = [];
-
-let visited;
-let count; //[모음 수, 자음 수, 전체 수]
-let temp;
-
 function isVowel(idx) {
   if (
     arr[idx] === "a" ||
@@ -24,49 +19,36 @@ function isVowel(idx) {
   return false;
 }
 
-function go(idx) {
+function go(idx, temp, count) {
   if (count[2] === L) {
     if (count[0] && count[1] > 1) {
-      answer.push(temp.join(""));
+      answer.push(temp);
     }
     return;
   }
 
   for (let i = idx + 1; i < C; i++) {
-    if (!visited[i]) {
-      temp.push(arr[i]);
-      visited[i] = true;
-      if (isVowel(i)) {
-        count[0]++;
-      } else {
-        count[1]++;
-      }
-      count[2]++;
-
-      go(i);
-
-      temp.pop();
-      visited[i] = false;
-      if (isVowel(i)) {
-        count[0]--;
-      } else {
-        count[1]--;
-      }
-      count[2]--;
+    const newCount = [...count];
+    if (isVowel(i)) {
+      newCount[0]++;
+    } else {
+      newCount[1]++;
     }
+    newCount[2]++;
+
+    go(i, temp + arr[i], newCount);
   }
 }
 
 function solve(L, C, arr) {
   for (let i = 0; i < C; i++) {
-    visited = Array.from({ length: L }, () => false);
-    temp = [arr[i]];
+    let count;
     if (isVowel(i)) {
       count = [1, 0, 1];
     } else {
       count = [0, 1, 1];
     }
-    go(i);
+    go(i, arr[i], count);
   }
   console.log(answer.join("\n"));
 }
