@@ -1,12 +1,12 @@
 
 
-function DFS(maps,queue,i,j,visited,maxX,maxY){
-    queue.push(maps[i][j]);
-    if(i+1<maxY){
+function DFS(maps,array,i,j,visited,maxI,maxJ){
+    array.push(maps[i][j]);
+    if(i+1<maxJ){
         if(!visited[i+1][j]){
             visited[i+1][j]=true;
             if(maps[i+1][j]!=="X"){
-                DFS(maps,queue,i+1,j,visited,maxX,maxY);         
+                DFS(maps,array,i+1,j,visited,maxI,maxJ);         
             }
         }
     }
@@ -14,17 +14,17 @@ function DFS(maps,queue,i,j,visited,maxX,maxY){
         if(!visited[i-1][j]){
             visited[i-1][j]=true;
             if(maps[i-1][j]!=="X"){
-                DFS(maps,queue,i-1,j,visited,maxX,maxY);         
+                DFS(maps,array,i-1,j,visited,maxI,maxJ);         
             }
         }
     
         
     }
-    if(j+1<maxX){
+    if(j+1<maxI){
         if(!visited[i][j+1]){
             visited[i][j+1]=true;
             if(maps[i][j+1]!=="X"){
-                DFS(maps,queue,i,j+1,visited,maxX,maxY);
+                DFS(maps,array,i,j+1,visited,maxI,maxJ);
              }
         }   
     }
@@ -32,7 +32,7 @@ function DFS(maps,queue,i,j,visited,maxX,maxY){
         if(!visited[i][j-1]){
             visited[i][j-1]=true;
             if(maps[i][j-1]!=="X"){
-                DFS(maps,queue,i,j-1,visited,maxX,maxY);
+                DFS(maps,array,i,j-1,visited,maxI,maxJ);
              }
         }   
     }
@@ -40,22 +40,23 @@ function DFS(maps,queue,i,j,visited,maxX,maxY){
 
 
 function solution(maps) {
-    const maxX=maps[0].length;
-    const maxY=maps.length;
-    console.log(maxX,maxY);
+    const maxI=maps[0].length; 
+    const maxJ=maps.length;
+    console.log(maxI,maxJ);
     
+    //방문여부 체크하는 배열
     const visited=Array.from(Array(maps.length), ()=>Array(maps[0].length).fill(false));
     
     const result=[];
-    for(let i=0; i<maxY; i++){
-        for(let j=0; j<maxX; j++){
-            if(!visited[i][j]){
+    for(let i=0; i<maxJ; i++){
+        for(let j=0; j<maxI; j++){
+            if(!visited[i][j]){ 
                 visited[i][j]=true;
+                
                 if(maps[i][j]!=="X"){
-                    const queue=[];
-                    DFS(maps,queue,i,j,visited,maxX,maxY);
-                    console.log(queue);
-                    result.push(queue.reduce((i,v)=>Number(i)+Number(v),0));
+                    const array=[];
+                    DFS(maps,array,i,j,visited,maxI,maxJ);
+                    result.push(array.reduce((i,v)=>Number(i)+Number(v),0));
                 }
             }
             
