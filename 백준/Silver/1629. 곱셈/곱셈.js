@@ -1,18 +1,19 @@
 const fs = require('fs');
-const [A,B,C] = fs.readFileSync("./dev/stdin").toString().trim().split(' ').map(BigInt)
+const filePath = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
+let input = fs.readFileSync(filePath).toString().split(' ');
 
-function pow(a,b){
-  if(b==0){
-  return BigInt(1); 
-  }else{
-    const temp = pow(a, BigInt(parseInt(b/BigInt(2))))
-    if(b%BigInt(2)==0){
-      return  (temp * temp) % C;
-    }else{
-      return (temp * temp * a) % C;
+function solution(input) {
+  let [a, b, c] = input.map(BigInt);
+
+  const power = (a, b) => {
+    if (b === BigInt(0)) return BigInt(1);
+    const half = power(a, BigInt(parseInt(b / BigInt(2))));
+    if (b % BigInt(2)) {
+      return (half * half * (a % c)) % c;
     }
-  }
+    return (half * half) % c;
+  };
+  return console.log(parseInt(power(a, b)));
 }
 
-
-console.log(parseInt(pow(A,B)))
+solution(input);
