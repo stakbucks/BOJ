@@ -58,7 +58,8 @@ function solution(input) {
       map[ny][nx] = 0;
     }
     location = [nx, ny];
-    console.log(dice[5]);
+    answer.push(dice[5]);
   }
+  console.log(answer.join('\n'));
 }
 solution(input);
