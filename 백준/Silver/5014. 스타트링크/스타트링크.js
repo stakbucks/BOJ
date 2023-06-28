@@ -29,7 +29,7 @@ function solution(input) {
   const queue = new Queue();
   queue.enqueue(S);
 
-  const set = new Set();
+  const set = new Set(); // 방문 여부 확인용
   set.add(S);
 
   while (queue.size()) {
@@ -44,8 +44,9 @@ function solution(input) {
       set.add(s - D);
       dp[s - D] = dp[s] + 1;
     }
+    if (dp[G] !== Infinity) return console.log(dp[G]);
   }
-  dp[G] === Infinity ? console.log('use the stairs') : console.log(dp[G]);
+  console.log('use the stairs');
 }
 
 solution(input);
