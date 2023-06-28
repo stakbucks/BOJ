@@ -7,7 +7,7 @@ function solution(input) {
   const answer = [];
   // 소수 여부 판별 함수
   const isPrimeNumber = (num) => {
-    for (let i = 2; i < num; i++) {
+    for (let i = 2; i < Math.abs(num / 2) + 1; i++) {
       if (num % i === 0) return false;
     }
     return true;
