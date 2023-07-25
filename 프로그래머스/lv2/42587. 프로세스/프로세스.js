@@ -21,7 +21,7 @@ function solution(priorities, location) {
   priorities.forEach((v, i) => {
     queue.enqueue({value: v, isTarget: location === i});
   });
-  priorities.sort((a, b) => a-b);
+  priorities.sort((a, b) => a - b);
   let count = 1;
   while (1) {
     const {value, isTarget} = queue.dequeue();
