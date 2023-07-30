@@ -1,22 +1,19 @@
-const fs = require("fs");
-const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-let input = fs.readFileSync(filePath).toString().split("\n");
-const N = Number(input[0]);
-const P = input[1].split(" ").map(Number);
-P.unshift(0);
+const fs = require('fs');
+const filePath = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
+let input = fs.readFileSync(filePath).toString().trim().split('\n');
 
-const d = [0, P[1], Math.min(2 * P[1], P[2])];
-for (let i = 3; i <= N; i++) {
-  let min = P[i];
-  let j = 1;
-  while (j <= i) {
-    if (j === i) {
-      min = Math.min(min, P[i]);
-    } else {
-      min = Math.min(min, d[j] + d[i - j]);
+function solution(input) {
+  const N = Number(input[0]);
+  const P = input[1].split(' ').map(Number);
+  P.unshift(0);
+  const dp = [...P];
+
+  for (let i = 1; i <= N; i++) {
+    for (let j = i - 1; j > 0; j--) {
+      dp[i] = Math.min(dp[i], dp[j] + dp[i - j]);
     }
-    j++;
   }
-  d[i] = min;
+  console.log(dp[N]);
 }
-console.log(d[N]);
+
+solution(input);
