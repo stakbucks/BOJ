@@ -2,6 +2,10 @@ const fs = require('fs');
 const filePath = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 let input = fs.readFileSync(filePath).toString().trim().split('\n');
 
+// 1. 입력값들을 A의 번호를 기준으로 정렬하고
+// 2. DFS로 전깃줄 하나씩 선택한 경우 / 선택 안한 경우로 탐색 (전깃줄이 서로 교차하지 않도록)
+// 3. 가지치기 진행 (안하면 시간초과 발생)
+
 function solution(input) {
   const N = Number(input[0]);
   const arr = [];
@@ -13,6 +17,7 @@ function solution(input) {
   const DFS = (i, cnt, min) => {
     const left = arr.length - i + cnt; // 최대로 고를 수 있는 수
     if (left <= maxCnt) {
+      // 끝까지 탐색해봤자 답이 될 수 없는 경우 가지치기
       return;
     }
     if (i === arr.length) {
@@ -21,7 +26,8 @@ function solution(input) {
       return;
     }
     if (arr[i][1] > min) {
-      // 만약 추가 가능한 전깃줄이면
+      // 추가 가능한 전깃줄일때
+      // 추가하는 경우
       DFS(i + 1, cnt + 1, arr[i][1]);
     }
     // 추가하지 않는 경우
@@ -31,5 +37,4 @@ function solution(input) {
   DFS(0, 0, 0);
   console.log(arr.length - maxCnt);
 }
-
 solution(input);
