@@ -1,24 +1,18 @@
-const input = require("fs")
-  .readFileSync("/dev/stdin")
-  .toString()
-  .trim()
-  .split("\n");
+const fs = require('fs');
+const filePath = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
+let input = fs.readFileSync(filePath).toString().trim().split('\n');
 
-const cal = (Arr) => {
-  Arr.map((v) => {
-    let [a, b] = v;
-    for (let i = K; i > a - 1; i--)
-      check[i] = Math.max(check[i], check[i - a] + b);
-  });
-  return check[K];
-};
+function solution(input) {
+  const [N, K] = input.shift().split(' ').map(Number);
+  const arr = Array.from({length: N}, (v, i) => input[i].split(' ').map(Number));
+  const dp = Array(K + 1).fill(0); // 무게별로 최대 가치 기록
 
-const [N, K] = input.shift().split(" ").map(Number);
-let check = [...new Array(K + 1)].fill(0);
-let arr = [];
-input.map((v) => {
-  let [w, g] = v.trim().split(" ").map(Number);
-  arr.push([w, g]);
-});
+  for (const [W, V] of arr) {
+    for (let i = K; i >= W; i--) {
+      dp[i] = Math.max(dp[i], dp[i - W] + V);
+    }
+  }
+  console.log(dp[K]);
+}
 
-console.log(cal(arr));
+solution(input);
