@@ -2,20 +2,20 @@ const fs = require('fs');
 const filePath = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 let input = fs.readFileSync(filePath).toString().trim().split('\n');
 
-function solution(input) {
-  const balloons = input[1].split(' ').map(Number);
-  const arrows = [];
-  for (const height of balloons) {
-    // 해당 높이의 풍선을 터뜨릴 수 있는 화살이 존재하는지 체크
-    const idx = arrows.indexOf(height);
-    if (idx !== -1) {
-      // 존재하면 해당 화살의 높이 -1
-      arrows[idx]--;
-    } else {
-      // 존재하지 않으면 새로운 화살 추가
-      arrows.push(height - 1);
-    }
-  }
-  console.log(arrows.length);
+let n = Number(input[0]);
+let h = input[1].split(' ').map(Number);
+let result = 0;
+
+let arrow = new Array(100001).fill(0); //각 높이에 현재 화살이 0개라고 가정
+for(let x of h){
+if(arrow[x] >0){ //해당 높이에 화살 있는 상황
+arrow[x] -= 1; //화살 개수 줄임
+arrow[x-1]+=1; //화살 위치를 한 단계 낮춤
 }
-solution(input);
+else { //해당 높이에 화살이 없는 상황
+arrow[x-1] +=1;
+result += 1; //화살을 쏨
+}
+}
+
+console.log(result);
