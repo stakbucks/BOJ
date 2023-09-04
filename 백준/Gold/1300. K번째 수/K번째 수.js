@@ -8,9 +8,8 @@ function solution(input) {
   let left = 1;
   let right = N * N;
   let result = 0;
-  let mid = Math.floor((left + right) / 2);
   while (left <= right) {
-    mid = Math.floor((left + right) / 2);
+    let mid = Math.floor((left + right) / 2);
     let count = 0;
     for (let i = 1; i <= N; i++) {
       count += getRowCount(i, mid);
