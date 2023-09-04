@@ -46,22 +46,23 @@ function solution(input) {
     return temp;
   }
   function getAvailableNumbers(x, y) {
+    // 가능한 숫자 구하기
     const row = checkRow(x, y);
     const col = checkColumn(x, y);
     const _3by3 = check3By3Board(x, y);
-    const temp = [];
+    const candidates = [];
     for (let i = 1; i <= 9; i++) {
       if (row[i] && col[i] && _3by3[i]) {
-        temp.push(i);
+        candidates.push(i);
       }
     }
-    return temp;
+    return candidates;
   }
 
   function DFS(i) {
     const [x, y] = targets[i];
-    const set = getAvailableNumbers(x, y);
-    for (const number of set) {
+    const candidates = getAvailableNumbers(x, y);
+    for (const number of candidates) {
       puzzle[x][y] = number;
       if (i === targets.length - 1) {
         console.log(puzzle.map((v) => v.join('')).join('\n'));
