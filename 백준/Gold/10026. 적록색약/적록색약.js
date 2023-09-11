@@ -45,6 +45,7 @@ function solution(input) {
     for (let i = 0; i < N; i++) {
       for (let j = 0; j < N; j++) {
         if (!visited[i][j]) {
+          visited[i][j] = true;
           if (!is적록색약) {
             BFS([i, j], grid[i][j], is적록색약, visited);
           } else {
@@ -61,10 +62,6 @@ function solution(input) {
     const queue = new Queue(init);
     while (queue.size()) {
       const [x, y] = queue.dequeue();
-      if (visited[x][y]) {
-        continue;
-      }
-      visited[x][y] = true;
       for (const [dx, dy] of dir) {
         const [nx, ny] = [x + dx, y + dy];
         if (nx < 0 || nx >= N || ny < 0 || ny >= N) {
@@ -79,6 +76,7 @@ function solution(input) {
         if (is적록색약 && color !== 적록색약Grid[nx][ny]) {
           continue;
         }
+        visited[nx][ny] = true;
         queue.enqueue([nx, ny]);
       }
     }
