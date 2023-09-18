@@ -13,5 +13,3 @@ function solution(weights) {
   }
   return count;
 }
-
-
