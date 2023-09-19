@@ -19,7 +19,8 @@ class Queue {
 function solution(board) {
   const queue = new Queue();
   let target;
-  let current;
+
+  // board에 각 위치까지 이동하는데 최소 이동 횟수 기록
   board = board.map((row, i) =>
     row.split('').map((v, j) => {
       if (v === '.') {
@@ -27,7 +28,6 @@ function solution(board) {
       }
       if (v === 'R') {
         queue.enqueue([i, j]);
-        current = [i, j];
         return 0;
       }
       if (v === 'G') {
@@ -48,6 +48,7 @@ function solution(board) {
 
   while (queue.size()) {
     const currentPos = queue.dequeue();
+    if (currentPos[0] === target[0] && currentPos[1] === target[1]) return board[target[0]][target[1]];
     for (const d of dir) {
       const [nx, ny] = move(d, currentPos);
       if (board[nx][ny] > board[currentPos[0]][currentPos[1]] + 1) {
@@ -59,14 +60,13 @@ function solution(board) {
   return board[target[0]][target[1]] === Infinity ? -1 : board[target[0]][target[1]];
 
   function move(d, currentPos) {
-    let [x, y] = currentPos;
+    // 특정 방향으로 한 번 움직였을 때의 위치를 리턴
     const [dx, dy] = d;
-    let [nx, ny] = [x, y];
-    while (nx + dx >= 0 && nx + dx < MAX_X && ny + dy >= 0 && ny + dy < MAX_Y && board[nx+dx][ny+dy] !== 'D') {
+    let [nx, ny] = [...currentPos];
+    while (nx + dx >= 0 && nx + dx < MAX_X && ny + dy >= 0 && ny + dy < MAX_Y && board[nx + dx][ny + dy] !== 'D') {
       nx += dx;
       ny += dy;
     }
     return [nx, ny];
   }
 }
-
