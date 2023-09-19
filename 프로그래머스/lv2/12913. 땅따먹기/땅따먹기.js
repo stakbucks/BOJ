@@ -1,11 +1,16 @@
 function solution(land) {
-  for (let i = 1; i < land.length; i++) {
-    land[i][0] += Math.max(...land[i - 1].filter((_, i) => i !== 0));
-    land[i][1] += Math.max(...land[i - 1].filter((_, i) => i !== 1));
-    land[i][2] += Math.max(...land[i - 1].filter((_, i) => i !== 2));
-    land[i][3] += Math.max(...land[i-1].filter((_, i) => i !== 3));
+  const dp = Array.from({length: land.length}, () => Array(4).fill(0));
+
+  dp[0] = land[0];
+
+  for (let i = 0; i < land.length - 1; i++) {
+    for (let j = 0; j < 4; j++)
+      // for (let k = 0; k < 4; k++) {
+      //   if (j === k) continue; // 두 행의 열이 같으면 건너뛰기
+      //   const temp = dp[i][j] + land[i + 1][k]; // 현재 행의 값 + 다음 행의 값
+      //   if (temp > dp[i + 1][k]) dp[i + 1][k] = temp; // dp의 해당 위치 값보다 temp가 더 크면 temp로 업데이트
+      // }
+      dp[i + 1][j] = land[i + 1][j] + Math.max(...dp[i].filter((_, i) => i !== j));
   }
-
-  return Math.max(...land.at(-1));
+  return Math.max(...dp.at(-1));
 }
-
