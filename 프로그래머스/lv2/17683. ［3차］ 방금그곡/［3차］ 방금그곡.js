@@ -9,37 +9,37 @@ function solution(m, musicinfos) {
         }
         return (endArr[0]-startArr[0])*60+(endArr[1]-startArr[1]); // 몇 분 재생됐는지 리턴
     }
-    console.log(calcTime("03:50","04:08"))
-    // '#' 처리하는 함수
+    // '#' 소문자로 변환해주고 전체 재생내용 악보 리턴해주는 함수
     const remakeNote=(str,time)=>{
         str.forEach(
             (i,v)=>
 {                if(i==="#"){
-                    if(str[v-1]==="C"){
-                        str[v-1]="c";
-                    }
-                    if(str[v-1]==="D"){
-                        str[v-1]="d";
-                    }
-                    if(str[v-1]==="F"){
-                        str[v-1]="f";
-                    }
-                    if(str[v-1]==="G"){
-                        str[v-1]="g";
-                    }
-                    if(str[v-1]==="A"){
-                        str[v-1]="a";
-                    }
+                    // if(str[v-1]==="C"){
+                    //     str[v-1]="c";
+                    // }
+                    // if(str[v-1]==="D"){
+                    //     str[v-1]="d";
+                    // }
+                    // if(str[v-1]==="F"){
+                    //     str[v-1]="f";
+                    // }
+                    // if(str[v-1]==="G"){
+                    //     str[v-1]="g";
+                    // }
+                    // if(str[v-1]==="A"){
+                    //     str[v-1]="a";
+                    // }
+                   str[v-1]=str[v-1].toLowerCase();
                    str.splice(v,1);
                 }}               
             );
-        let i=0;
+        
+        // m 인 경우
         if(time===-1) return str.join("");
         
-        
+        let i=0;
         while(str.length<time){
-            str.push(str[i%str.length]);
-            i++;
+            str.push(str[i++%str.length]);
         }
         while(str.length>time){
             str.pop();
@@ -63,12 +63,7 @@ function solution(m, musicinfos) {
     const candidates=[];
     m=remakeNote([...m],-1);
     for(const [title, {index,time,note}] of map){
-        if(m.length===note.length){
-            if(m===note){
-                candidates.push(title);
-            }
-        }
-        if(m.length<note.length){
+        if(m.length<=note.length){
             if(note.includes(m)){
                 candidates.push(title);
             }
