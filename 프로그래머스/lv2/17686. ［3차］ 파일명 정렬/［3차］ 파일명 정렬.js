@@ -14,7 +14,6 @@ function solution(files) {
     const tail = file.slice(j);
     separatedFiles.push([head, number, tail]);
   }
-  console.log(separatedFiles);
   separatedFiles.sort((a, b) => {
     if (a[0].toLowerCase() === b[0].toLowerCase()) {
       // head 같은 경우
