@@ -17,24 +17,25 @@ class Queue {
 }
 
 function solution(x, y, n) {
+  if (x === y) return 0;
   const queue = new Queue();
-  let answer = -1;
 
   const visited = Array(y + 1).fill(-1);
   visited[x] = 0;
+
   queue.enqueue(x);
-if(x===y) return 0;
+
   while (queue.size()) {
     const value = queue.dequeue();
-    for (const nextNum of [value + n, value * 2, value * 3]) {
-      if (nextNum === y) {
+    for (const nextValue of [value + n, value * 2, value * 3]) {
+      if (nextValue === y) {
         return visited[value] + 1;
       }
-      if (visited[nextNum] !== -1 || nextNum > y) {
+      if (visited[nextValue] !== -1 || nextValue > y) {
         continue;
       }
-      queue.enqueue(nextNum);
-      visited[nextNum] = visited[value] + 1;
+      queue.enqueue(nextValue);
+      visited[nextValue] = visited[value] + 1;
     }
   }
   return -1;
