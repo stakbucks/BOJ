@@ -19,15 +19,13 @@ const dirs = [
 function solution(input) {
   const [R, C, T] = input.shift();
 
-  // 미세먼지들의 위치 기록
-  let dustLocs = new Set();
   // 공기청정기 위치
-  const cleanderLocs = [];
+  const cleanerLocs = [];
 
   for (let i = 0; i < R; i++) {
     for (let j = 0; j < C; j++) {
       if (input[i][j] === CLEANER) {
-        cleanderLocs.push([i, j]);
+        cleanerLocs.push([i, j]);
       }
     }
   }
@@ -36,6 +34,7 @@ function solution(input) {
     spread();
     airCleanerOperate();
   }
+
   let count = 0;
   for (let i = 0; i < R; i++) {
     for (let j = 0; j < C; j++) {
@@ -43,12 +42,16 @@ function solution(input) {
     }
   }
   console.log(count);
+
   // 미세먼지 확산
   function spread() {
-    const tempInput = input.map((v) => [...v]);
+    // 동시에 확산되므로 임시 배열 temp에 확산된 결과를 저장하고
+    // 마지막에 확산이 다 끝났을 때 한 번에 원본을 갱신해준다
+    const temp = input.map((v) => [...v]);
 
     for (let i = 0; i < R; i++) {
       for (let j = 0; j < C; j++) {
+        // 미세먼지 양이 5 이상인 경우에만 확산한다
         if (input[i][j] >= 5) {
           const spreadVal = ~~(input[i][j] / 5); // 확산되는 양
 
@@ -58,21 +61,21 @@ function solution(input) {
             if (nx < 0 || nx >= R || ny < 0 || ny >= C) continue;
             if (input[nx][ny] === CLEANER) continue;
 
-            tempInput[nx][ny] += spreadVal;
-            tempInput[i][j] -= spreadVal;
+            temp[nx][ny] += spreadVal;
+            temp[i][j] -= spreadVal;
           }
         }
       }
     }
-    input = tempInput.map((v) => [...v]);
+    input = temp.map((v) => [...v]);
   }
 
   // 공기청정기 작동
   function airCleanerOperate() {
     const temp = input.map((v) => [...v]);
 
-    const topIdx = cleanderLocs[0][0];
-    const bottomIdx = cleanderLocs[1][0];
+    const topIdx = cleanerLocs[0][0];
+    const bottomIdx = cleanerLocs[1][0];
 
     // 위쪽 공기청정기 순환
     for (let j = 1; j < C; j++) {
