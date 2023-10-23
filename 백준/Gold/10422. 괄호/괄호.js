@@ -12,13 +12,13 @@ function solution(input) {
   dp[1] = BigInt(1);
 
   for (let i = 2; i < 2501; i++) {
-    for (let j = 0; j <= i - 1; j++) {
+    for (let j = i - 1; j >= 0; j--) {
       dp[i] = (dp[i] + dp[j] * dp[i - 1 - j]) % DIVIDE_NUM;
     }
   }
   for (const length of L) {
-    if (length % 2 !== 0) answer.push(0);
-    else answer.push(dp[length / 2].toString());
+    if (length % 2) answer.push(0);
+    else answer.push(dp[length / 2]);
   }
 
   console.log(answer.join('\n'));
