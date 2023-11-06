@@ -12,8 +12,8 @@ function solution(input) {
   const students = input.pop();
   const difference = [];
 
-  for (let i = 0; i < students.length - 1; i++) {
-    difference.push(students[i + 1] - students[i]);
+  for (let i = 1; i < students.length; i++) {
+    difference.push(students[i] - students[i - 1]);
   }
 
   difference.sort((a, b) => a - b);
