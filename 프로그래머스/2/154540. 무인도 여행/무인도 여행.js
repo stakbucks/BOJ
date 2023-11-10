@@ -29,24 +29,23 @@ const dirs = [
 function solution(maps) {
   const result = [];
   maps = maps.map((v) => v.split(''));
-  let flag = false;
   for (let i = 0; i < maps.length; i++) {
     for (let j = 0; j < maps[0].length; j++) {
       if (maps[i][j] !== 'X') {
-          flag=true
         const sum = BFS(i, j);
         result.push(sum);
       }
     }
   }
-  if (!flag) return [-1];
-  return result.sort((a, b) => a - b);
+  return result.length ? result.sort((a, b) => a - b) : [-1];
 
   function BFS(i, j) {
     let sum = Number(maps[i][j]);
+
     const queue = new Queue();
     queue.enqueue([i, j]);
     maps[i][j] = 'X';
+
     while (queue.size()) {
       const [x, y] = queue.dequeue();
       for (const [dx, dy] of dirs) {
@@ -54,16 +53,12 @@ function solution(maps) {
 
         if (nx < 0 || nx >= maps.length || ny < 0 || ny >= maps[0].length) continue;
         if (maps[nx][ny] === 'X') continue;
-        else {
-          queue.enqueue([nx, ny]);
-          sum += Number(maps[nx][ny]);
-          maps[nx][ny] = 'X';
-        }
+
+        queue.enqueue([nx, ny]);
+        sum += Number(maps[nx][ny]);
+        maps[nx][ny] = 'X';
       }
     }
-      console.log(sum)
     return sum;
-  }
-}
-
+  }}
 //["X591X","X1X5X","X231X", "1XXX1"]
