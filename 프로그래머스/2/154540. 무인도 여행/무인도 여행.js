@@ -1,22 +1,27 @@
-class Queue {
-  queue = [];
-  front = 0;
-  rear = 0;
+function Queue() {
+  let queue = [];
+  let front = 0;
+  let rear = 0;
 
-  enqueue(value) {
-    this.queue[this.rear] = value;
-    this.rear++;
+  function enqueue(value) {
+    queue[rear] = value;
+    rear++;
   }
 
-  dequeue() {
-    const returnValue = this.queue[this.front];
-    delete this.queue[this.front++];
+  function dequeue() {
+    const returnValue = queue[front];
+    delete queue[front++];
     return returnValue;
   }
 
-  size() {
-    return this.rear - this.front;
+  function size() {
+    return rear - front;
   }
+  return {
+    enqueue,
+    dequeue,
+    size,
+  };
 }
 
 const dirs = [
@@ -42,7 +47,7 @@ function solution(maps) {
   function BFS(i, j) {
     let sum = Number(maps[i][j]);
 
-    const queue = new Queue();
+    const queue = Queue();
     queue.enqueue([i, j]);
     maps[i][j] = 'X';
 
