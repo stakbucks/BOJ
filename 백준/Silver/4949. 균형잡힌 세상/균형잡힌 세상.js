@@ -11,7 +11,7 @@ function solution(input) {
 
     let result = 'yes';
 
-    [...line].forEach((letter) => {
+    for (const letter of line) {
       // 여는 괄호는 스택에 넣어준다
       if (letter === '[' || letter === '(') {
         stack.push(letter);
@@ -21,18 +21,18 @@ function solution(input) {
       if (letter === ')') {
         if (stack.at(-1) !== '(') {
           result = 'no';
-          return;
+          break;
         }
         stack.pop();
       }
       if (letter === ']') {
         if (stack.at(-1) !== '[') {
           result = 'no';
-          return;
+          break;
         }
         stack.pop();
       }
-    });
+    }
 
     if (stack.length) result = 'no'; // 괄호가 안닫힌 채로 문자열이 끝나는 경우!
 
