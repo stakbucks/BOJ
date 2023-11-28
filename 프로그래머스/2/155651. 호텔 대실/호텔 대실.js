@@ -1,44 +1,28 @@
-class Hotel {
-  hotel = new Map();
-
-  createRoom(endTime) {
-    this.hotel.set(this.hotel.size, endTime); // (방 번호, 예약 끝나는 시간)
-  }
-
-  book(startTime, endTime) {
-    // 예약 가능한 방 찾기
-    for (const [number,bookedEndTime] of this.hotel) {
-      if (addTenMinutes(bookedEndTime) > startTime) continue;
-      else {
-        // 예약 가능한 방인 경우
-        this.hotel.set(number, endTime);
-          return;
-      }
-    }
-    // 예약 가능한 방이 없는 경우
-    this.createRoom(endTime);
-  }
-
-  getRooms() {
-    return this.hotel.size;
-  }
-}
-
 function solution(book_time) {
-  const hotel = new Hotel();
-  book_time.sort().forEach((time) => {
-    const [startTime, endTime] = time;
-    hotel.book(startTime, endTime);
-  });
-  return hotel.getRooms();
-}
+  let stack = [];
 
-function addTenMinutes(time) {
-  let [hour, min] = time.split(':');
-  min = (Number(min) + 10).toString();
-  if (min >= 60) {
-    hour++;
-    min -= 60;
+  function transMinute(time) {
+    let [hour, minute] = time.split(':').map(Number);
+    return hour * 60 + minute;
   }
-  return `${`${hour}`.padStart(2, '0')}:${`${min}`.padStart(2, '0')}`;
+
+  book_time.sort((a, b) => transMinute(a[0]) - transMinute(b[0]));
+
+  for (let i = 0; i < book_time.length; i++) {
+    let [start, end] = book_time[i];
+    let j = 0;
+    while (true) {
+      if (j === stack.length) {
+        stack.push(transMinute(end) + 10);
+        break;
+      } else {
+        if (transMinute(start) >= stack[j]) {
+          stack[j] = transMinute(end) + 10;
+          break;
+        }
+      }
+      j++;
+    }
+  }
+  return stack.length;
 }
