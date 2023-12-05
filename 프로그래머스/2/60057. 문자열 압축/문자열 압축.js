@@ -1,45 +1,38 @@
 function solution(s) {
-    const maxUnitLength=Math.floor(s.length/2);
-    let answer=s.length;
-    
-    let temp='';
-    let cnt=1;
-    let result='';
-    
-    for(let i=1; i<=maxUnitLength; i++){
-        let j=0;
-        while(j<s.length){
-            const unit=s.slice(j,j+i);
-            if(temp===unit){
-                cnt++;
+  const maxPatternLength = ~~(s.length / 2);
+  let answer = s.length;
 
-            }else{
-                cnt===1 ? result+=temp : result+=`${cnt}${temp}`
-                cnt=1;
-                temp=unit;
-            }
-            j+=i;
-        }
-    cnt===1 ? result+=temp : result+=`${cnt}${temp}`
+  let pattern = ''; // 압축될 패턴
+  let cnt = 1; // 압축된 패턴의 개수를 나타내는 값
 
-        
-        answer=Math.min(answer, result.length);
-        result=''
-        temp='';
-        cnt=1;
-    }   
+  // i: 압축할 패턴의 길이
+  for (let i = 1; i <= maxPatternLength; i++) {
+    let result = ''; // 압축 패턴의 길이 마다 저장될 결과
 
-    
-    return answer;
-}   
+    let j = 0; // j: s의 인덱스
+    while (j < s.length) {
+      const unit = s.slice(j, j + i); // 압축할 길이 만큼 자른 문자열
 
+      if (pattern === unit) {
+        cnt++;
+      } else {
+        // 패턴이 한 번만 반복되면 1 생략
+        result += `${cnt === 1 ? '' : cnt}${pattern}`;
+        cnt = 1;
 
-// ababcdcd ababcdcd
+        pattern = unit;
+      }
+      j += i;
+    }
 
-// aaabc => 2aabc
+    result += `${cnt === 1 ? '' : cnt}${pattern}`;
 
-// temp='a'
-// result=''
-// cnt=2
+    answer = Math.min(answer, result.length);
 
-// unit=a
+    // pattern, cnt 값 초기화
+    pattern = '';
+    cnt = 1;
+  }
+
+  return answer;
+}
