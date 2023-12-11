@@ -2,7 +2,7 @@ const SHEEP = 0;
 const WOLF = 1;
 
 function solution(info, edges) {
-  const dp = Array(info.length).fill([]);
+  const wolvesOnTheWay = Array(info.length).fill([]);
 
   const tree = new Map();
 
@@ -16,12 +16,12 @@ function solution(info, edges) {
   function getWolvesOntheWayByDFS(node) {
     const children = tree.get(node);
     children?.forEach((child) => {
-      dp[child] = info[child] === WOLF ? [...dp[node], child] : [...dp[node]];
+      wolvesOnTheWay[child] = info[child] === WOLF ? [...wolvesOnTheWay[node], child] : [...wolvesOnTheWay[node]];
       getWolvesOntheWayByDFS(child);
     });
   }
 
-  const sheepNodes = new Set(info.reduce((acc, cur, idx) => (cur === WOLF ? [...acc] : [...acc, idx]), []).sort((a, b) => dp[a].length - dp[b].length));
+  const sheepNodes = new Set(info.reduce((acc, cur, idx) => (cur === WOLF ? [...acc] : [...acc, idx]), []).sort((a, b) => wolvesOnTheWay[a].length - wolvesOnTheWay[b].length));
   sheepNodes.delete(0);
   let maxSheeps = 0;
 
@@ -35,7 +35,7 @@ function solution(info, edges) {
 
     sheepNodes.forEach((nextNode) => {
       const nextPassedWolves = new Set(passedWolves);
-      dp[nextNode].forEach((passedWolf) => {
+      wolvesOnTheWay[nextNode].forEach((passedWolf) => {
         nextPassedWolves.add(passedWolf);
       });
       if (sheepCnt > nextPassedWolves.size) {
