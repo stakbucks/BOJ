@@ -17,42 +17,38 @@ function solution(picks, minerals) {
 
     i = j;
   }
-    
-    if(splitMinerals.length>diaPicks+ironPicks+stonePicks){
-        splitMinerals.pop();
-    }
+
+  // while (diaPicks + ironPicks + stonePicks < splitMinerals.length) {
+  //   splitMinerals.pop();
+  // }
 
   let fatigue = 0;
 
-  const sorted = splitMinerals.sort((a, b) => {
-    const [aDia, aIron, aStone] = a;
-    const [bDia, bIron, bStone] = b;
+  splitMinerals.slice(0,diaPicks + ironPicks + stonePicks)
+    .sort((a, b) => {
+      const [aDia, aIron, aStone] = a;
+      const [bDia, bIron, bStone] = b;
 
-    if (a.length !== b.length) {
-      return 1
-    }
-
-    if (aDia === bDia) {
-      if (aIron === bIron) {
-        return bStone - aStone;
+      if (aDia === bDia) {
+        if (aIron === bIron) {
+          return bStone - aStone;
+        }
+        return bIron - aIron;
       }
-      return bIron - aIron;
-    }
-    return bDia - aDia;
-  });
-
-  sorted.forEach(([dia, iron, stone]) => {
-    if (diaPicks) {
-      fatigue += diamondPick.get('diamond') * dia + diamondPick.get('iron') * iron + diamondPick.get('stone') * stone;
-      diaPicks--;
-    } else if (ironPicks) {
-      fatigue += ironPick.get('diamond') * dia + ironPick.get('iron') * iron + ironPick.get('stone') * stone;
-      ironPicks--;
-    } else if (stonePicks) {
-      fatigue += stonePick.get('diamond') * dia + stonePick.get('iron') * iron + stonePick.get('stone') * stone;
-      stonePicks--;
-    }
-  });
+      return bDia - aDia;
+    })
+    .forEach(([dia, iron, stone]) => {
+      if (diaPicks) {
+        fatigue += diamondPick.get('diamond') * dia + diamondPick.get('iron') * iron + diamondPick.get('stone') * stone;
+        diaPicks--;
+      } else if (ironPicks) {
+        fatigue += ironPick.get('diamond') * dia + ironPick.get('iron') * iron + ironPick.get('stone') * stone;
+        ironPicks--;
+      } else if (stonePicks) {
+        fatigue += stonePick.get('diamond') * dia + stonePick.get('iron') * iron + stonePick.get('stone') * stone;
+        stonePicks--;
+      }
+    });
   return fatigue;
 
   function countMineralCategories(minerals) {
