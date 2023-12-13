@@ -1,40 +1,77 @@
 function solution(picks, minerals) {
-  const [maxDia, maxIron, maxStone] = picks;
-  // 필요한 곡괭이 수
-
+  let [diaPicks, ironPicks, stonePicks] = picks;
   const diamondPick = new Map().set('diamond', 1).set('iron', 1).set('stone', 1);
   const ironPick = new Map().set('diamond', 5).set('iron', 1).set('stone', 1);
   const stonePick = new Map().set('diamond', 25).set('iron', 5).set('stone', 1);
-  let minFatigue = Infinity;
 
-  DFS(0, 0, 0, 0, 0);
+  // minerals를 다 섯개씩 쪼개서 diamond가 많은 순으로 정렬 => diamond 곡괭이 먼저 사용!
 
-  function DFS(index, dia, iron, stone, fatigue) {
-    // 더 이상 사용가능한 곡괭이가 없거나, 캘 광물이 없으면 종료
-    if (dia + iron + stone === maxDia + maxIron + maxStone || index === minerals.length) {
-      minFatigue = Math.min(minFatigue, fatigue);
-      return;
-    }
+  const splitMinerals = [];
+  let i = 0;
 
-    let nextIndex = index + 5 > minerals.length - 1 ? minerals.length : index + 5;
+  while (i < minerals.length) {
+    const j = i + 5 > minerals.length - 1 ? minerals.length : i + 5;
 
-    const slicedMinerals = minerals.slice(index, nextIndex);
+    const mineralsCnt = countMineralCategories(minerals.slice(i, j));
+    splitMinerals.push(mineralsCnt);
 
-    if (dia < maxDia) {
-      const nextFatigue = slicedMinerals.reduce((acc, cur) => acc + diamondPick.get(cur), fatigue);
-      DFS(nextIndex, dia + 1, iron, stone, nextFatigue);
-    }
-    if (iron < maxIron) {
-      const nextFatigue = slicedMinerals.reduce((acc, cur) => acc + ironPick.get(cur), fatigue);
-      DFS(nextIndex, dia, iron + 1, stone, nextFatigue);
-    }
-    if (stone < maxStone) {
-      const nextFatigue = slicedMinerals.reduce((acc, cur) => acc + stonePick.get(cur), fatigue);
-      DFS(nextIndex, dia, iron, stone + 1, nextFatigue);
-    }
+    i = j;
   }
+    
+    if(splitMinerals.length>diaPicks+ironPicks+stonePicks){
+        splitMinerals.pop();
+    }
 
-  return minFatigue;
+  let fatigue = 0;
+
+  const sorted = splitMinerals.sort((a, b) => {
+    const [aDia, aIron, aStone] = a;
+    const [bDia, bIron, bStone] = b;
+
+    if (a.length !== b.length) {
+      return 1
+    }
+
+    if (aDia === bDia) {
+      if (aIron === bIron) {
+        return bStone - aStone;
+      }
+      return bIron - aIron;
+    }
+    return bDia - aDia;
+  });
+
+  sorted.forEach(([dia, iron, stone]) => {
+    if (diaPicks) {
+      fatigue += diamondPick.get('diamond') * dia + diamondPick.get('iron') * iron + diamondPick.get('stone') * stone;
+      diaPicks--;
+    } else if (ironPicks) {
+      fatigue += ironPick.get('diamond') * dia + ironPick.get('iron') * iron + ironPick.get('stone') * stone;
+      ironPicks--;
+    } else if (stonePicks) {
+      fatigue += stonePick.get('diamond') * dia + stonePick.get('iron') * iron + stonePick.get('stone') * stone;
+      stonePicks--;
+    }
+  });
+  return fatigue;
+
+  function countMineralCategories(minerals) {
+    let [dia, iron, stone] = [0, 0, 0];
+
+    minerals.forEach((mineral) => {
+      switch (mineral) {
+        case 'diamond':
+          dia++;
+          break;
+        case 'iron':
+          iron++;
+          break;
+        case 'stone':
+          stone++;
+          break;
+      }
+    });
+
+    return [dia, iron, stone];
+  }
 }
-
-
